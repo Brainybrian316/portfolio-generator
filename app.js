@@ -63,21 +63,28 @@
 // });
 
 // ! refactoring code with new knowledge 
+const inquirer = require('inquirer');
+inquirer
+    .prompt([{
+        type: 'input',
+        name: 'name',
+        message: 'What is your name?'
+    }])
+    .then(answers => console.log(answers));
+// // variable to load the html file
+// const fs = require('fs');
+// // require statement to include the generatePage function in this file. 
+// const generatePage = require('./src/page-template');
+// //  * variable to process the node arguments which is going to be changed with inquirer
+// // const profileDataArgs = process.argv.slice(2);
+// // * variable for the name and github values in an array/object to be passed into the generatePage function which will be replaced with inquirer
+// // const [inputName, github] = profileDataArgs;
+// // variable to store the generatePage function output
+// const pageHTML = generatePage(inputName, github);
 
-// variable to load the html file
-const fs = require('fs');
-// require statement to include the generatePage function in this file. 
-const generatePage = require('./src/page-template');
-//  variable to process the node arguments
-const profileDataArgs = process.argv.slice(2);
-//  variable for the name and github values in an array/object to be passed into the generatePage function
-const [inputName, github] = profileDataArgs;
-// variable to store the generatePage function output
-const pageHTML = generatePage(inputName, github);
+// // method to write the html file to the file system
+// fs.writeFile('./index.html', pageHTML, err => {
+//     if (err) throw err;
 
-// method to write the html file to the file system
-fs.writeFile('./index.html', pageHTML, err => {
-    if (err) throw err;
-
-    console.log('Portfolio complete! Check out index.html to see the output');
-});
+//     console.log('Portfolio complete! Check out index.html to see the output');
+// });
