@@ -63,14 +63,83 @@
 // });
 
 // ! refactoring code with new knowledge 
+// variable to load inquirer
 const inquirer = require('inquirer');
-inquirer
-    .prompt([{
-        type: 'input',
-        name: 'name',
-        message: 'What is your name?'
-    }])
-    .then(answers => console.log(answers));
+//  function to prompt user for their information
+const promptUser = () => {
+    //  return the inquirer prompt to the user
+    return inquirer.prompt([{
+            // type is a property that is used to determine what kind of input the user will be given
+            type: 'input',
+            // name is a property used when storing the answer from the user response 
+            name: 'name',
+            // message is a property that is the question to print
+            message: 'What is your name?'
+        },
+        {
+            type: 'input',
+            name: 'github',
+            message: 'Enter your Github Username'
+        },
+        {
+            type: 'input',
+            name: 'about',
+            message: 'Provide a short description about yourself:'
+        }
+    ]);
+};
+
+const promptProject = portfolioData => {
+    console.log(`
+    ==============
+    Add a New Project
+    ==============
+    `);
+    if (!portfolioData.projects) {
+        portfolioData.projects = [];
+    }
+    return inquirer.prompt([{
+            type: 'input',
+            name: 'name',
+            message: 'What is the name of your project?'
+        },
+        {
+            type: 'input',
+            name: 'description',
+            message: 'Provide a description of the project (Required)'
+        },
+        {
+            type: 'checkbox',
+            name: 'languages',
+            message: 'What did you build this project with? (Check all that apply)',
+            choices: ['JavaScript', 'HTML', 'CSS', 'ES6', 'jQuery', 'Bootstrap', 'Node']
+        },
+        {
+            type: 'input',
+            name: 'link',
+            message: 'Enter the GitHub link to your project. (Required)'
+        },
+        {
+            type: 'confirm',
+            name: 'feature',
+            message: 'Would you like to feature this project?',
+            default: false
+        },
+        {
+            type: 'confirm',
+            name: 'confirmAddProject',
+            message: 'Would you like to enter another project?',
+            default: false
+        }
+    ]).then(projectData => {
+        portfolioData.projects.push(projectData)
+        if (projectData.confirmAddProject) {
+            return promptProject(portfolioData);
+        } else {
+            return portfolioData;
+        }
+    });
+};
 // // variable to load the html file
 // const fs = require('fs');
 // // require statement to include the generatePage function in this file. 
@@ -87,4 +156,14 @@ inquirer
 //     if (err) throw err;
 
 //     console.log('Portfolio complete! Check out index.html to see the output');
-// });
+// }
+
+
+promptUser()
+    .then(promptProject)
+    .then(portfolioData => {
+        console.log(portfolioData);
+    })
+// .then(answers => console.log(answers))
+// .then(promptProject)
+// .then(projectAnswers => console.log(projectAnswers))
