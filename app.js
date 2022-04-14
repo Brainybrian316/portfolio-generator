@@ -204,12 +204,13 @@ promptUser()
     .then(portfolioData => {
         // variable to store the generatePage function output
         const pageHTML = generatePage(portfolioData);
-        // // method to write the html file to the file system
-        // fs.writeFile('./index.html', pageHTML, err => {
-        //     if (err) throw err;
+        // method to write the html file to the file system
+        fs.writeFile('./index.html', pageHTML, err => {
+            if (err) throw err;
 
-        //     console.log('Portfolio complete! Check out index.html to see the output');
-        // }
+            console.log('Portfolio complete! Check out index.html to see the output');
+
+        })
     })
 // .then(answers => console.log(answers))
 // .then(promptProject)
