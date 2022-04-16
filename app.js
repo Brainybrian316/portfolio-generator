@@ -65,8 +65,8 @@
 // ! refactoring code with new knowledge 
 // variable to load inquirer
 const inquirer = require('inquirer');
-// variable to load the html file
-const fs = require('fs');
+// variable to call the functions to  generate the HTML page
+const { writeFile, copyFile } = require('./utils/generate-site.js');
 // require statement to include the generatePage function in this file. 
 const generatePage = require('./src/page-template');
 // //  * variable to process the node arguments which is going to be changed with inquirer
@@ -199,29 +199,51 @@ const promptProject = portfolioData => {
     });
 };
 
+// * this is known as nesting callback this is bad practice
+// promptUser()
+// .then(promptProject)
+// .then(portfolioData => {
+//     // variable to store the generatePage function output
+//     const pageHTML = generatePage(portfolioData);
+//     // method to write the html file to the file system
+//     fs.writeFile('./dist/index.html', pageHTML, err => {
+//         if (err) {
+//           console.log(err);
+//           return;
+//         }
+//         console.log('Page created! Check out index.html in this directory to see it!');
+      
+//         fs.copyFile('./src/style.css', './dist/style.css', err => {
+//           if (err) {
+//             console.log(err);
+//             return;
+//           }
+//           console.log('Style sheet copied successfully!');
+//         });
+//       });
+//     });
+
+// * this is using promises to handle the callback hell which is good practice
 promptUser()
-    .then(promptProject)
-    .then(portfolioData => {
-        // variable to store the generatePage function output
-        const pageHTML = generatePage(portfolioData);
-        // method to write the html file to the file system
-        fs.writeFile('./dist/index.html', pageHTML, err => {
-            if (err) {
-              console.log(err);
-              return;
-            }
-            console.log('Page created! Check out index.html in this directory to see it!');
-          
-            fs.copyFile('./src/style.css', './dist/style.css', err => {
-              if (err) {
-                console.log(err);
-                return;
-              }
-              console.log('Style sheet copied successfully!');
-            });
-          });
-        });
+  .then(promptProject)
+  .then(portfolioData => {
+    return generatePage(portfolioData);
+  })
+  .then(pageHTML => {
+    return writeFile(pageHTML);
+  })
+  .then(writeFileResponse => {
+    console.log(writeFileResponse);
+    return copyFile();
+  })
+  .then(copyFileResponse => {
+    console.log(copyFileResponse);
+  })
+  .catch(err => {
+    console.log(err);
+  });
     
+//   *old code
 // .then(answers => console.log(answers))
 // .then(promptProject)
 // .then(projectAnswers => console.log(projectAnswers))
